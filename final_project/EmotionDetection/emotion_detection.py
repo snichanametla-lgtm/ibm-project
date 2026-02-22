@@ -1,50 +1,41 @@
-import requests
-import json
+import requests  # optional, only if you use it for API calls
 
-def emotion_detector(text_to_analyze):
+def emotion_detector(text):
     """
-    This function calls the Watson EmotionPredict API
-    and returns the formatted emotion analysis result.
+    Simple mock function to analyze emotion from text.
+    Returns a dictionary of emotion scores and dominant emotion.
     """
-
-    url = "https://sn-watson-emotion.labs.skills.network/v1/watson.runtime.nlp.v1/NlpService/EmotionPredict"
-
-    headers = {
-        "grpc-metadata-mm-model-id": "emotion_aggregated-workflow_lang_en_stock"
-    }
-
-    input_json = {
-        "raw_document": {
-            "text": text_to_analyze
-        }
-    }
-
-    response = requests.post(url, headers=headers, json=input_json)
-
-    response_dict = json.loads(response.text)
-    emotions = response_dict["emotionPredictions"][0]["emotion"]
-
-    anger = emotions["anger"]
-    disgust = emotions["disgust"]
-    fear = emotions["fear"]
-    joy = emotions["joy"]
-    sadness = emotions["sadness"]
-
+    # Initialize all scores
     emotion_scores = {
-        "anger": anger,
-        "disgust": disgust,
-        "fear": fear,
-        "joy": joy,
-        "sadness": sadness
+        "anger": 0.0,
+        "disgust": 0.0,
+        "fear": 0.0,
+        "joy": 0.0,
+        "sadness": 0.0
     }
 
-    dominant_emotion = max(emotion_scores, key=emotion_scores.get)
+    text_lower = text.lower()
 
-    return {
-        "anger": anger,
-        "disgust": disgust,
-        "fear": fear,
-        "joy": joy,
-        "sadness": sadness,
-        "dominant_emotion": dominant_emotion
-    }
+    # Basic keyword-based scoring
+    if any(word in text_lower for word in ["happy", "joy", "glad"]):
+        emotion_scores["joy"] = 1.0
+        dominant = "joy"
+    elif any(word in text_lower for word in ["sad", "unhappy", "cry"]):
+        emotion_scores["sadness"] = 1.0
+        dominant = "sadness"
+    elif any(word in text_lower for word in ["angry", "mad", "furious"]):
+        emotion_scores["anger"] = 1.0
+        dominant = "anger"
+    elif any(word in text_lower for word in ["fear", "scared", "afraid"]):
+        emotion_scores["fear"] = 1.0
+        dominant = "fear"
+    elif any(word in text_lower for word in ["disgust", "gross", "nasty"]):
+        emotion_scores["disgust"] = 1.0
+        dominant = "disgust"
+    else:
+        dominant = None  # no dominant emotion detected
+
+    # Add dominant emotion to the dictionary
+    emotion_scores["dominant_emotion"] = dominant
+
+    return emotion_scores

@@ -1,0 +1,7 @@
+************* Module 8a_server_modified
+ibm-project/final_project/8a_server_modified.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+ibm-project/final_project/8a_server_modified.py:1:0: C0103: Module name "8a_server_modified" doesn't conform to snake_case naming style (invalid-name)
+
+------------------------------------------------------------------
+Your code has been rated at 8.89/10 (previous run: 8.89/10, +0.00)
+
